@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bible Caption Generator — Bread of Life & Pen Lavi a Radyo</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-light: #E1F5EE;
+    --green-mid: #9FE1CB;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --text-light: #999;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.1);
+    --border-light: rgba(0,0,0,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 50%, #5DCAA5 100%);
+    padding: 3rem 1.5rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '✦';
+    position: absolute;
+    font-size: 300px;
+    color: rgba(255,255,255,0.04);
+    top: -80px; right: -60px;
+    line-height: 1;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .hero h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: white;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  /* Main container */
+  .container {
+    max-width: 680px;
+    margin: -2rem auto 3rem;
+    padding: 0 1rem;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    padding: 1.75rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  /* Ministry toggle */
+  .ministry-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .ministry-btn {
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .ministry-btn.active {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  .ministry-btn .min-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+  }
+  .ministry-btn .min-lang {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    display: block;
+  }
+  .ministry-btn.active .min-name { color: var(--green-dark); }
+
+  /* Form grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+  .field select, .field input[type="text"], .field input[type="number"] {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+  .field select:focus, .field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,0.1); }
+
+  /* Platform pills */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .plat-btn {
+    padding: 10px 8px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .plat-btn svg { width: 18px; height: 18px; }
+  .plat-btn:hover { border-color: var(--green); color: var(--green); }
+  .plat-btn.active.yt { border-color: #cc0000; background: #fff0f0; color: #cc0000; }
+  .plat-btn.active.fb { border-color: #1877f2; background: #e8f0fe; color: #1857c4; }
+  .plat-btn.active.ig { border-color: #c13584; background: #fce8f3; color: #c13584; }
+  .plat-btn.active.tt { border-color: #333; background: #f0f0f0; color: #111; }
+
+  /* Generate button */
+  .gen-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+  }
+  .gen-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(29,158,117,0.3); }
+  .gen-btn:active { transform: translateY(0); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Output */
+  .output-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg);
+  }
+  .output-meta { display: flex; align-items: center; gap: 8px; }
+  .output-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-yt { background: #fff0f0; color: #cc0000; }
+  .badge-fb { background: #e8f0fe; color: #1857c4; }
+  .badge-ig { background: #fce8f3; color: #c13584; }
+  .badge-tt { background: #f0f0f0; color: #111; }
+
+  .output-title { font-size: 13px; color: var(--text-muted); font-weight: 400; }
+
+  .copy-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .copy-btn:hover { border-color: var(--green); color: var(--green); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); background: var(--green-light); }
+
+  .output-body {
+    padding: 1.5rem 1.25rem;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Loading */
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 3rem;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--green-light);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Verse banner */
+  .verse-banner {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.875rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--green-dark);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-light);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .footer strong { color: var(--text-muted); }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .platform-grid { grid-template-columns: repeat(2,1fr); }
+    .ministry-toggle { grid-template-columns: 1fr; }
+    .hero { padding: 2rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">✦ Ministry Tools</div>
+  <h1>Bible Caption Generator</h1>
+  <p>Bread of Life &nbsp;·&nbsp; Pen Lavi a Radyo</p>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="verse-banner">
+      "Thy word is a lamp unto my feet, and a light unto my path." — Psalm 119:105
+    </div>
+
+    <!-- Ministry -->
+    <div class="section-label">Ministry</div>
+    <div class="ministry-toggle" style="margin-bottom:1.5rem;">
+      <div class="ministry-btn active" id="min-bol" onclick="setMinistry('bol')">
+        <span class="min-name">Bread of Life</span>
+        <span class="min-lang">English · KJV</span>
+      </div>
+      <div class="ministry-btn" id="min-plr" onclick="setMinistry('plr')">
+        <span class="min-name">Pen Lavi a Radyo</span>
+        <span class="min-lang">Kreyol · Bib Kreyol</span>
+      </div>
+    </div>
+
+    <!-- Book & Chapter -->
+    <div class="section-label">Scripture</div>
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="field">
+        <label>Book</label>
+        <select id="book">
+          <option>Matthew</option><option>Mark</option><option>Luke</option>
+          <option>John</option><option>Acts</option><option>Romans</option>
+          <option>1 Corinthians</option><option>2 Corinthians</option>
+          <option>Galatians</option><option>Ephesians</option><option>Philippians</option>
+          <option>Colossians</option><option>1 Thessalonians</option><option>2 Thessalonians</option>
+          <option>1 Timothy</option><option>2 Timothy</option><option>Titus</option>
+          <option>Philemon</option><option>Hebrews</option><option>James</option>
+          <option>1 Peter</option><option>2 Peter</option><option>1 John</option>
+          <option>2 John</option><option>3 John</option><option>Jude</option>
+          <option>Revelation</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Chapter</label>
+        <input type="number" id="chapter" min="1" max="150" value="1" />
+      </div>
+    </div>
+
+    <!-- Parts -->
+    <div class="grid-2" style="margin-bottom:1.5rem;">
+      <div class="field">
+        <label>Total Parts</label>
+        <select id="total-parts" onchange="updatePartOptions()">
+          <option value="1">1 — Full chapter</option>
+          <option value="2">2 parts</option>
+          <option value="3">3 parts</option>
+          <option value="4">4 parts</option>
+          <option value="5">5 parts</option>
+          <option value="6">6 parts</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>This Part</label>
+        <select id="this-part">
+          <option value="1">Part 1</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Platform -->
+    <div class="section-label">Platform</div>
+    <div class="platform-grid" style="margin-bottom:1.5rem;">
+      <button class="plat-btn yt active" id="plat-youtube" onclick="setPlatform('youtube')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4.1-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.9C6.8 19 12 19 12 19s4.8 0 7-.2c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM10 15V9l5.2 3L10 15z"/></svg>
+        YouTube
+      </button>
+      <button class="plat-btn fb" id="plat-facebook" onclick="setPlatform('facebook')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        Facebook
+      </button>
+      <button class="plat-btn ig" id="plat-instagram" onclick="setPlatform('instagram')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </button>
+      <button class="plat-btn tt" id="plat-tiktok" onclick="setPlatform('tiktok')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+        TikTok
+      </button>
+    </div>
+
+    <!-- Timestamps -->
+    <div class="field" style="margin-bottom:1.5rem;">
+      <label>Timestamps (optional)</label>
+      <input type="text" id="timestamps" placeholder="e.g. 0:00–1:17, 1:17–2:34, 2:34–4:04" />
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generate()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Generate Caption
+    </button>
+  </div>
+
+  <div id="output-area"></div>
+
+  <div class="footer">
+    <strong>Bread of Life</strong> &nbsp;·&nbsp; <strong>Pen Lavi a Radyo</strong><br>
+    Powered by Claude AI &nbsp;·&nbsp; For ministry use
+  </div>
+</div>
+
+<script>
+let ministry = 'bol';
+let platform = 'youtube';
+
+function setMinistry(m) {
+  ministry = m;
+  document.getElementById('min-bol').classList.toggle('active', m === 'bol');
+  document.getElementById('min-plr').classList.toggle('active', m === 'plr');
+}
+
+function setPlatform(p) {
+  platform = p;
+  ['youtube','facebook','instagram','tiktok'].forEach(x => {
+    document.getElementById('plat-'+x).classList.remove('active');
+  });
+  document.getElementById('plat-'+p).classList.add('active');
+}
+
+function updatePartOptions() {
+  const tp = parseInt(document.getElementById('total-parts').value);
+  const sel = document.getElementById('this-part');
+  sel.innerHTML = '';
+  for(let i=1;i<=tp;i++){
+    const o = document.createElement('option');
+    o.value = i; o.textContent = 'Part ' + i;
+    sel.appendChild(o);
+  }
+}
+
+function badgeClass(p) {
+  return {youtube:'badge-yt',facebook:'badge-fb',instagram:'badge-ig',tiktok:'badge-tt'}[p];
+}
+function badgeLabel(p) {
+  return {youtube:'YouTube',facebook:'Facebook',instagram:'Instagram',tiktok:'TikTok'}[p];
+}
+
+async function generate() {
+  const book = document.getElementById('book').value;
+  const chapter = document.getElementById('chapter').value;
+  const totalParts = document.getElementById('total-parts').value;
+  const thisPart = document.getElementById('this-part').value;
+  const timestamps = document.getElementById('timestamps').value;
+  const btn = document.getElementById('gen-btn');
+  const area = document.getElementById('output-area');
+
+  btn.disabled = true;
+  area.innerHTML = `<div class="output-card"><div class="loading-state"><div class="spinner"></div><span>Generating your caption...</span></div></div>`;
+
+  const isKreyol = ministry === 'plr';
+  const ministryName = isKreyol ? 'Pen Lavi a Radyo' : 'Bread of Life';
+  const lang = isKreyol ? 'Haitian Kreyol' : 'English';
+  const partNote = totalParts === '1' ? '' : ` This is Part ${thisPart} of ${totalParts}.`;
+  const tsNote = timestamps ? ` Timestamps for this part: ${timestamps}` : '';
+
+  const bookKreyol = {
+    Matthew:'Matye', Mark:'Mak', Luke:'Lik', John:'Jan', Acts:'Travay Apot yo',
+    Romans:'Women', Revelation:'Revelasyon'
+  };
+  const bookName = isKreyol ? (bookKreyol[book] || book) : book;
+
+  const platformInstructions = {
+    youtube: isKreyol
+      ? `Write a YouTube video description in Haitian Kreyol for ${bookName} Chapit ${chapter}. 2-4 rich paragraphs summarizing the chapter with theological depth. End with a key verse quote. Then add footer:\n📌 Swiv nou pandan nou ap travèse tout Nouvo Testaman an chapit pa chapit.\n👍 Renmen, Abòne, ak Pataje pou ede gaye Pawòl la!`
+      : `Write a YouTube video description in English for ${book} Chapter ${chapter}. 2-4 rich paragraphs with theological depth and narrative flow. End with a key KJV verse quote. Then add:\n🎧 Audio Credit: Dramatized Audio Bible – King James Version (KJV): New Testament | Author/Publisher: Thomas Nelson | Reader: Full Cast | Source: AudiobookStore.com | Purchased and used for non-commercial ministry purposes.\n📌 Follow along as we go through the entire New Testament chapter by chapter.\n👍 Like, Subscribe, and Share to help spread the Word!`,
+    facebook: isKreyol
+      ? `Write a Facebook caption in Haitian Kreyol for ${bookName} Chapit ${chapter}.${partNote} 3-5 warm devotional sentences. End with: "Renmen, Pataje & Swiv Pen Lavi a Radyo pou plis Ekriti! 🙏". End with hashtags: #Bib #Kreyol #${bookName.replace(/\s/g,'')} #NouvoTestaman #PenLaviARadyo #EtudeEkriti #BibKreyol`
+      : `Write a Facebook caption in English for ${book} Chapter ${chapter}.${partNote} 3-5 warm devotional sentences. End with audio credit: "Audio: Dramatized Audio Bible – KJV New Testament by Thomas Nelson | AudiobookStore.com". Then: "Like, Share & Follow Bread of Life for more Scripture!" Then hashtags: #Bible #KJV #${book} #NewTestament #BreadOfLife #AudioBible #ScriptureStudy`,
+    instagram: isKreyol
+      ? `Write an Instagram caption in Haitian Kreyol for ${bookName} Chapit ${chapter}.${partNote} Engaging, emoji-rich, short punchy paragraphs. Include a key verse. End with "Swiv Pen Lavi a Radyo pou Ekriti chak jou 👣\nRenmen & Pataje pou gaye Pawòl la! 🙏". Then 15 hashtags including #Bib #Kreyol #${bookName.replace(/\s/g,'')} #NouvoTestaman #PenLaviARadyo #EtudeEkriti #BibKreyol #Kretyen #Jezi #Lafwa #PawòlBondye #InstaBib #BonDye plus 2 chapter-specific ones.`
+      : `Write an Instagram caption in English for ${book} Chapter ${chapter}.${partNote} Punchy, emotional, emoji-rich. Short paragraphs. Include a key KJV verse. End with "Follow Bread of Life for daily Scripture 👣\nLike & Share to spread the Word! 🙏". Then 15 hashtags including #Bible #KJV #${book} #NewTestament #BreadOfLife #AudioBible #ScriptureStudy #Christian #Jesus #Faith #DailyBible #InstaBible #GodsWord plus 2 chapter-specific ones.`,
+    tiktok: isKreyol
+      ? `Write a TikTok caption in Haitian Kreyol for ${bookName} Chapit ${chapter}.${partNote} Ultra short hook, 3-5 lines, dramatic, emojis. End with chapter reference and hashtags: #Bib #Kreyol #${bookName.replace(/\s/g,'')} #PenLaviARadyo #BibKreyol #Kretyen #Jezi #FYP`
+      : `Write a TikTok caption in English for ${book} Chapter ${chapter}.${partNote} Ultra short hook, 3-5 lines max, dramatic opener, emojis. End with chapter reference and hashtags: #Bible #KJV #${book} #NewTestament #BibleStudy #AudioBible #Christian #Jesus #FYP plus 2 chapter-specific ones.`
+  };
+
+  const systemPrompt = `You are a social media caption writer for a Christian Bible ministry. You write captions for ${ministryName} in ${lang}.
+
+STYLE RULES BY PLATFORM:
+- YouTube: Rich, theological, descriptive. Multiple paragraphs. End with a scripture quote then the footer provided.
+- Facebook: 3-5 warm devotional sentences. Conversational. Include audio info and hashtags.
+- Instagram: Punchy, emotional, emoji throughout. Short paragraphs. Key verse quoted. Strong CTA. Many hashtags.
+- TikTok: Ultra short hook. Dramatic. 3-5 lines only. Emojis. Hashtags with #FYP.
+
+CRITICAL RULES:
+- ${isKreyol ? 'Write ENTIRELY in Haitian Kreyol. NO English except proper names. NO KJV references. NO audio credit (public domain). Ministry is Pen Lavi a Radyo.' : 'Write in English. Reference KJV. Include audio credit for Bread of Life. Ministry is Bread of Life.'}
+- Be theologically accurate and spiritually engaging.
+- Match the exact tone and format described.
+- Output ONLY the ready-to-post caption. No preamble. No explanation. No quotes around it.`;
+
+  const userPrompt = `Generate a ${platform} caption for ${bookName} Chapter ${chapter}.${partNote}${tsNote}
+
+${platformInstructions[platform]}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': '', 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content ? data.content.map(b => b.text || '').join('') : 'Error: ' + JSON.stringify(data);
+
+    const partLabel = totalParts !== '1' ? ` · Part ${thisPart} of ${totalParts}` : '';
+
+    area.innerHTML = `
+      <div class="output-card">
+        <div class="output-header">
+          <div class="output-meta">
+            <span class="output-badge ${badgeClass(platform)}">${badgeLabel(platform)}</span>
+            <span class="output-title">${bookName} Ch. ${chapter}${partLabel}</span>
+          </div>
+          <button class="copy-btn" id="copy-btn" onclick="copyText()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="output-body" id="caption-text">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      </div>`;
+  } catch(e) {
+    area.innerHTML = `<div class="output-card"><div class="loading-state" style="color:#cc0000;">⚠️ Error generating caption. Please check your connection and try again.</div></div>`;
+  }
+  btn.disabled = false;
+}
+
+function copyText() {
+  const text = document.getElementById('caption-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
